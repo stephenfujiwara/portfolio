@@ -9,11 +9,12 @@ import "./App.css";
 function App() {
   return (
     <div className="h-screen">
-      <Canvas camera={{ position: [0, 0, 0] }}>
+      <Canvas camera={{ position: [0, 0, 5] }}>
         <color attach="background" args={["black"]} />
         <axesHelper args={[5]} />
         <Stars />
         <ambientLight intensity={0.15} />
+        <OrbitControls />
         <ScrollControls pages={10} horizontal={true} infinite={true}>
           <Frame />
         </ScrollControls>
