@@ -1,22 +1,39 @@
-import { useRef } from "react";
-import { useScroll, useTexture } from "@react-three/drei";
+import { useRef, useState } from "react";
+import { useCursor, useScroll, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { DoubleSide } from "three";
+import { DoubleSide, Vector3 } from "three";
 
-export default function Frames() {
+export default function CurvedFrames({ images, radius }) {
   const data = useScroll();
   const ref = useRef();
+  const center = new Vector3(0, 0, 0);
+
   useFrame((state, delta) => {
-    ref.current.rotation.y += Math.max(0, data.delta * 50);
+    ref.current.rotation.y = data.offset * 10 * (2 * Math.PI);
+    ref.current.children.map((child) => {
+      child.lookAt(center);
+    });
   });
-  return (
-    <group ref={ref}>
-      <CurvedFrame />
-    </group>
-  );
+  const frames = [];
+  for (let i = 0; i < images.length; i++) {
+    const ratio = i / images.length;
+    frames.push(
+      <CurvedFrame
+        key={i}
+        image={images[i]}
+        position={[
+          radius * Math.sin(ratio * Math.PI),
+          0,
+          radius * Math.cos(ratio * Math.PI),
+        ]}
+        rotation={[0, ratio * (2 * Math.PI), 0]}
+      />
+    );
+  }
+  return <group ref={ref}>{frames}</group>;
 }
 
-function CurvedFrame() {
+function CurvedFrame({ image, ...props }) {
   const vertexShader = `
   #define PI 3.1415926538
   varying vec2 vUv;
@@ -36,14 +53,20 @@ function CurvedFrame() {
     gl_FragColor = vec4(texture, 1.0);
   } 
   `;
-  const [test] = useTexture(["test.png"]);
+  const [texture] = useTexture([image]);
+  const [hover, setHover] = useState(false);
+  useCursor(hover);
   return (
-    <mesh>
-      <planeGeometry args={[4, 2, 16, 16]} position={[0, 0, 0]} />
+    <mesh
+      {...props}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
+    >
+      <planeGeometry args={[4, 2, 16, 16]} />
       <shaderMaterial
         fragmentShader={fragmentShader}
         vertexShader={vertexShader}
-        uniforms={{ uTexture: { value: test } }}
+        uniforms={{ uTexture: { value: texture } }}
         side={DoubleSide}
       />
     </mesh>
