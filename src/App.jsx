@@ -5,6 +5,11 @@ import {
   Scroll,
   OrbitControls,
   Sphere,
+  FirstPersonControls,
+  Text,
+  Text3D,
+  Center,
+  GradientTexture,
 } from "@react-three/drei";
 
 import Stars from "./components/Stars";
@@ -13,22 +18,22 @@ import Test from "./components/Test";
 import AnimatedFrame from "./components/AnimatedFrame";
 
 import "./App.css";
+import Welcome from "./components/Welcome";
 
 function App() {
   return (
     <div className="h-screen">
-      <Canvas camera={{ position: [0, 0, 5] }}>
+      <Canvas camera={{ position: [0, 0, 0] }}>
         <color attach="background" args={["black"]} />
+        {/*<Welcome />*/}
         <Stars />
-        <ambientLight intensity={0.15} />
-        <OrbitControls />
-        <AnimatedFrame />
-        {/*<ScrollControls pages={10} horizontal={true} infinite={true}>
+        <ambientLight intensity={0.5} />
+        <ScrollControls pages={10} horizontal={true} infinite={true}>
           <CurvedFrames
             images={["test.png", "test2.png", "test3.png"]}
-            radius={9}
+            radius={5}
           />
-  </ScrollControls>*/}
+        </ScrollControls>
       </Canvas>
     </div>
   );

@@ -1,7 +1,14 @@
-import { useRef, useState } from "react";
-import { useCursor, useScroll, useTexture } from "@react-three/drei";
+import {
+  useCursor,
+  useScroll,
+  useTexture,
+  Text3D,
+  Text,
+  Float,
+} from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { DoubleSide, Vector3 } from "three";
+import { useRef, useState } from "react";
 
 export default function CurvedFrames({ images, radius }) {
   const data = useScroll();
@@ -30,7 +37,11 @@ export default function CurvedFrames({ images, radius }) {
       />
     );
   }
-  return <group ref={ref}>{frames}</group>;
+  return (
+    <Float floatingRange={[-0.01, 0.01]} floatIntensity={3}>
+      <group ref={ref}>{frames}</group>;
+    </Float>
+  );
 }
 
 function CurvedFrame({ image, ...props }) {
@@ -56,6 +67,20 @@ function CurvedFrame({ image, ...props }) {
   const [texture] = useTexture([image]);
   const [hover, setHover] = useState(false);
   useCursor(hover);
+
+  let count = 1;
+
+  const [flash, setFlash] = useState(false);
+  const text = useRef();
+
+  useFrame((state, delta) => {
+    if (count === 20) {
+      setFlash((prevFlash) => !prevFlash);
+      count = 1;
+    } else {
+      count += 1;
+    }
+  });
   return (
     <mesh
       {...props}
@@ -69,6 +94,19 @@ function CurvedFrame({ image, ...props }) {
         uniforms={{ uTexture: { value: texture } }}
         side={DoubleSide}
       />
+      {/*image === "test.png" && (
+        <Float floatingRange={[-0.01, 0.1]}>
+          <Text
+            font={"Inter_Bold.json"}
+            position={[0, 1.3, 0]}
+            size={0.2}
+            rotation={[Math.PI / 8, 0, 0]}
+          >
+            {"Click For More Info!"}
+            <meshStandardMaterial color={flash ? "yellow" : "white"} />
+          </Text>
+        </Float>
+      )*/}
     </mesh>
   );
 }
