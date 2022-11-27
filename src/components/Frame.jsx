@@ -1,16 +1,9 @@
-import {
-  useCursor,
-  useScroll,
-  useTexture,
-  Text3D,
-  Text,
-  Float,
-} from "@react-three/drei";
+import { useCursor, useScroll, useTexture, Float } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { DoubleSide, Vector3 } from "three";
 import { useRef, useState } from "react";
 
-export default function CurvedFrames({ images, radius }) {
+export default function CurvedFrames({ projects, radius, setDesc }) {
   const data = useScroll();
   const ref = useRef();
   const center = new Vector3(0, 0, 0);
@@ -21,30 +14,52 @@ export default function CurvedFrames({ images, radius }) {
       child.lookAt(center);
     });
   });
+
+  const active = useRef();
+
   const frames = [];
-  for (let i = 0; i < images.length; i++) {
-    const ratio = i / images.length;
+  for (let i = 0; i < projects.length; i++) {
+    const ratio = i / projects.length;
     frames.push(
       <CurvedFrame
         key={i}
-        image={images[i]}
+        image={projects[i].image}
         position={[
-          radius * Math.sin(ratio * Math.PI),
-          0,
           radius * Math.cos(ratio * Math.PI),
+          0,
+          -radius * Math.sin(ratio * Math.PI),
         ]}
         rotation={[0, ratio * (2 * Math.PI), 0]}
+        handleClick={() => {
+          if (active.current === projects[i]) {
+            active.current = "";
+            setDesc("");
+          } else {
+            active.current = projects[i];
+            setDesc(projects[i]);
+          }
+          //console.log(active.current);
+        }}
       />
     );
   }
+
   return (
     <Float floatingRange={[-0.01, 0.01]} floatIntensity={3}>
-      <group ref={ref}>{frames}</group>;
+      <group
+        ref={ref}
+        onPointerMissed={() => {
+          setDesc("");
+          //console.log(active.current);
+        }}
+      >
+        {frames}
+      </group>
     </Float>
   );
 }
 
-function CurvedFrame({ image, ...props }) {
+function CurvedFrame({ image, handleClick, handleMiss, ...props }) {
   const vertexShader = `
   #define PI 3.1415926538
   varying vec2 vUv;
@@ -68,24 +83,15 @@ function CurvedFrame({ image, ...props }) {
   const [hover, setHover] = useState(false);
   useCursor(hover);
 
-  let count = 1;
+  const [desc, setDesc] = useState(false);
 
-  const [flash, setFlash] = useState(false);
-  const text = useRef();
-
-  useFrame((state, delta) => {
-    if (count === 20) {
-      setFlash((prevFlash) => !prevFlash);
-      count = 1;
-    } else {
-      count += 1;
-    }
-  });
+  useFrame((state, delta) => {});
   return (
     <mesh
       {...props}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}
+      onClick={() => handleClick()}
     >
       <planeGeometry args={[4, 2, 16, 16]} />
       <shaderMaterial
@@ -94,19 +100,6 @@ function CurvedFrame({ image, ...props }) {
         uniforms={{ uTexture: { value: texture } }}
         side={DoubleSide}
       />
-      {/*image === "test.png" && (
-        <Float floatingRange={[-0.01, 0.1]}>
-          <Text
-            font={"Inter_Bold.json"}
-            position={[0, 1.3, 0]}
-            size={0.2}
-            rotation={[Math.PI / 8, 0, 0]}
-          >
-            {"Click For More Info!"}
-            <meshStandardMaterial color={flash ? "yellow" : "white"} />
-          </Text>
-        </Float>
-      )*/}
     </mesh>
   );
 }

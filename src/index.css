@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Silka";
+    font-style: regular;
+    src: url("/fonts/silka-regular-webfont.ttf");
+  }
+  @font-face {
+    font-family: "Silka";
+    font-style: italic;
+    src: url("/fonts/silka-regularitalic-webfont.ttf");
+  }
+  @font-face {
+    font-family: "Lato";
+    font-style: regular;
+    src: url("/fonts/Lato-Regular.ttf");
+  }
+  @font-face {
+    font-family: "Roadgeek";
+    font-style: regular;
+    src: url("/fonts/Roadgeek.ttf");
+  }
+}
