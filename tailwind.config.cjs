@@ -7,6 +7,7 @@ module.exports = {
         silka: ["Silka", "serif"],
         lato: ["Lato", "sans-serif"],
         roadgeek: ["Roadgeek", "sans-serif"],
+        japan: ["hiraki", "sans-serif"],
       },
     },
   },

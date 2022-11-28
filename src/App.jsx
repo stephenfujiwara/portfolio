@@ -5,6 +5,7 @@ import { useState } from "react";
 import Stars from "./components/Stars";
 import CurvedFrames from "./components/Frame";
 import Description from "./components/Description";
+import Welcome from "./components/Welcome";
 import { projects } from "./projects";
 
 import "./App.css";
@@ -14,9 +15,9 @@ function App() {
   return (
     <div className="h-screen">
       {desc?.title && <Description {...desc} />}
+      <Welcome />
       <Canvas camera={{ position: [0, 0, 0] }}>
         <color attach="background" args={["black"]} />
-        {/*<Welcome />*/}
         <Stars />
         <ambientLight intensity={0.5} />
         <ScrollControls pages={10} horizontal={true} infinite={true}>

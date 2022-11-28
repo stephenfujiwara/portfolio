@@ -25,9 +25,9 @@ export default function CurvedFrames({ projects, radius, setDesc }) {
         key={i}
         image={projects[i].image}
         position={[
-          radius * Math.cos(ratio * Math.PI),
+          radius * Math.sin(ratio * Math.PI),
           0,
-          -radius * Math.sin(ratio * Math.PI),
+          -radius * Math.cos(ratio * Math.PI),
         ]}
         rotation={[0, ratio * (2 * Math.PI), 0]}
         handleClick={() => {

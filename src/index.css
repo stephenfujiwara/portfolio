@@ -23,4 +23,13 @@
     font-style: regular;
     src: url("/fonts/Roadgeek.ttf");
   }
+  @font-face {
+    font-family: "NotoSansJP";
+    font-style: medium;
+    src: url("/fonts/NotoSansJP-Medium.otf");
+  }
+  @font-face {
+    font-family: "hiraki";
+    src: url("/fonts/hiraki.otf");
+  }
 }
