@@ -80,7 +80,7 @@ function CurvedFrame({ image, handleClick, handleMiss, ...props }) {
   } 
   `;
   const [texture] = useTexture([image]);
-  const [hover, setHover] = useState(false);
+  const [hover, setHover] = useState(null);
   useCursor(hover);
 
   const [desc, setDesc] = useState(false);

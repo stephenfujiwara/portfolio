@@ -6,6 +6,7 @@ import Stars from "./components/Stars";
 import CurvedFrames from "./components/Frame";
 import Description from "./components/Description";
 import Welcome from "./components/Welcome";
+import Footer from "./components/Footer";
 import { projects } from "./projects";
 
 import "./App.css";
@@ -16,6 +17,7 @@ function App() {
     <div className="h-screen">
       {desc?.title && <Description {...desc} />}
       <Welcome />
+      <Footer />
       <Canvas camera={{ position: [0, 0, 0] }}>
         <color attach="background" args={["black"]} />
         <Stars />
